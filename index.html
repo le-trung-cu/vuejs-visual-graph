@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="cell.css">
+  <script src="./vue.js"></script>
+</head>
+<style>
+  .contain{
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+  }
+  .nav {
+    display: flex;
+    justify-content: space-around;
+    margin: 20px;
+  }
+
+  .nav>* {
+    padding: 4px 4px;
+    background-color: #fbfbfb;
+    cursor: pointer;
+    /* margin-left: 19px; */
+    font-size: 15px;
+  }
+
+  .nav>button {
+    border: 1px solid crimson;
+  }
+
+  .nav span {
+    margin: 10px 10px;
+  }
+
+  .nav .state {
+    background: red;
+  }
+
+  #app {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+  }
+  #video{
+    overflow: hidden;
+    width: 500px;
+    object-fit: fill;
+
+  }
+  video{
+    object-fit: cover;
+    width: 100%;
+  }
+</style>
+
+<body>
+  <div id="app">
+    <div id="video">
+      <video src="./example.webm" autoplay controls loop ></video>
+    </div>
+    <div class="contain">
+      <nav class="nav">
+        <div><span>&#x1F525</span>start</div>
+        <div><span>&#9917</span>end</div>
+        <button :class="{'state': isEraser}" @click="toggleEraser()">
+          <span>
+            <img src="./eraser.png" title="eraser" alt="" srcset="">
+          </span>eraser
+        </button>
+        <button :class="{'state': isSelect}" @click="setCellStyle(0)">
+          <span>
+            <img src="./clicker.png" alt="" srcset="">
+          </span>select</button>
+        <button :class="{'state': isWall}" @click="setCellStyle(1)"><span>&#11036;</span>wall</button>
+
+        <button :class="{'state': isMid}" @click="setCellStyle(4)"><span>&#128163;</span> mid</button>
+        <button @click="resetApp" title="reset">&#128257;</button>
+        <button :class="{'state': isRunning}" @click="runVisual" :disabled="!canRunVisualBtn">Run Visual</button>
+
+      </nav>
+      <div :class="[{'real-time': realTimeAble}]">
+        <div class="row" v-for="(row, i) in grid" :key="i">
+          <div v-for="(cell, j) in row" :key="j">
+            <button :id=`c_${i}_${j}` :class="[{empty: cell==0},
+                {wall: cell==1},
+                {start: cell==2},
+                {end: cell==3},
+                {mid: cell==4},
+                'cell']" @mousedown="onMountDown(i,j)" @mouseup="onMountUp(i,j)" @mouseover="onMountOver(i,j)">
+              <span></span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+  <script src="./app.js"></script>
+</body>
+
+</html>
